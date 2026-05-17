@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CareConnect.Model/CareConnect.Model.csproj" />
+  <Project Path="CareConnect.View/CareConnect.View.csproj" />
+  <Project Path="CareConnect.ViewModel/CareConnect.ViewModel.csproj" />
+</Solution>
