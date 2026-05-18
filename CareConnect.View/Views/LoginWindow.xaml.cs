@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CareConnect.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -12,14 +13,13 @@ using System.Windows.Shapes;
 
 namespace CareConnect.View.Views
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        public LoginWindow(LoginViewModel loginViewModel)
         {
             InitializeComponent();
+
+            DataContext = loginViewModel;
         }
     }
 }

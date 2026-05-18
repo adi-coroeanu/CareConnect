@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CareConnect.Model\CareConnect.Model.csproj" />
-    <ProjectReference Include="..\CareConnect.ViewModel\CareConnect.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

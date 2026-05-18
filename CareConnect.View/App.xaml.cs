@@ -1,4 +1,6 @@
-﻿using CareConnect.View.Views;
+﻿using CareConnect.View.Services;
+using CareConnect.View.Views;
+using CareConnect.WPF.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +25,15 @@ public partial class App
             //})
             .ConfigureServices((context, services) =>
             {
+                //Views
                 services.AddTransient<LoginWindow>();
+                services.AddTransient<SignupWindow>();
 
+                //ViewModels
+                services.AddTransient<LoginViewModel>();
+
+                //Services
+                services.AddTransient<WindowService>();
 
             })
             .Build();
