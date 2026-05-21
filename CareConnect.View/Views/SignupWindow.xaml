@@ -5,22 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CareConnect.View.Views"
         mc:Ignorable="d"
-        Title="Signup" Height="450" Width="800">
-    <Grid Background="LightGray">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="300" Width="250">
+        xmlns:viewmodels="clr-namespace:CareConnect.WPF.ViewModels"
+        d:DataContext="{d:DesignInstance Type=viewmodels:SignupViewModel, IsDesignTimeCreatable=False}"
+        Title="Signup" Height="500" Width="800">
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/login-signupPhoto.jpg" Stretch="UniformToFill" />
+        </Grid.Background>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Height="Auto" Width="250">
             <Border CornerRadius="20" Background="White">
                 <StackPanel Margin="10">
                     <TextBlock Text="Signup" HorizontalAlignment="Center" FontSize="30" FontWeight="Bold"/>
-                    <TextBlock Text="Username" Margin="0 10 0 0"/>
-                    <TextBox Padding="2"/>
-                    <TextBlock Text="Username already exists!" Foreground="Red"/>
+                    <TextBlock Text="Email" Margin="0 10 0 0"/>
+                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Padding="2"/>
+                    <TextBlock Text="Email already used!" Foreground="Red" Visibility="{Binding EmailUsedError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <TextBlock Text="First name"/>
+                    <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"  Padding="2"/>
+                    <TextBlock Text="Last name"/>
+                    <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" Padding="2"/>
                     <TextBlock Text="Password" Margin="0 5 0 0"/>
-                    <PasswordBox Padding="2"/>
-                    <TextBlock Text="Password don't contain all symbols: Ab1#" Foreground="Red"/>
+                    <PasswordBox x:Name="PasswordBox" PasswordChanged="PasswordChanged" Padding="2"/>
+                    <TextBlock Text="Incorrect password format!" Foreground="Red" Visibility="{Binding PasswordFormatError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <TextBlock Text="Re-enter password" Margin="0 5 0 0"/>
-                    <PasswordBox Padding="2"/>
-                    <TextBlock Text="Passwords don't match!" Foreground="Red"/>
-                    <Button Content="Sign up" Padding="5" FontSize="15" Margin="0 10 0 0"/>
+                    <PasswordBox x:Name="RepasswordBox" PasswordChanged="RepasswordChanged" Padding="2"/>
+                    <TextBlock Text="Passwords don't match!" Foreground="Red" Visibility="{Binding PasswordMatchError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Grid Margin="0 5 0 0">
+                        <TextBlock Text="Staff member? Enter code:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding StaffCode}" HorizontalAlignment="Right" Width="80" Padding="2"/>
+                    </Grid>
+                    <TextBlock Text="Incorrect code!" Foreground="Red" Visibility="{Binding CodeError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Button Content="Sign up" Command="{Binding SignupCommand}" Padding="5" FontSize="15" Margin="0 10 0 0"/>
                 </StackPanel>
             </Border>
         </Grid>

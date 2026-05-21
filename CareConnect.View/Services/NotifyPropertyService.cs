@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace CareConnect.ViewModel.Commands
+namespace CareConnect.ViewModel.Services
 {
-    public abstract class NotifyProperty : INotifyPropertyChanged
+    public abstract class NotifyPropertyService : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

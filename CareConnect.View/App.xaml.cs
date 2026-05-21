@@ -1,6 +1,10 @@
-﻿using CareConnect.View.Services;
+﻿using CareConnect.Model.Models;
+using CareConnect.Model.Services;
+using CareConnect.View.Services;
 using CareConnect.View.Views;
+using CareConnect.WPF.Services;
 using CareConnect.WPF.ViewModels;
+using CareConnect.WPF.Views;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,15 +29,27 @@ public partial class App
             //})
             .ConfigureServices((context, services) =>
             {
+                services.AddDbContext<ModelContext>(options =>
+                {
+                    options.UseOracle("User Id=CareConnect;Password=CareConnect1234;Data Source=localhost:1521/XEPDB1;");
+                });
+
                 //Views
                 services.AddTransient<LoginWindow>();
                 services.AddTransient<SignupWindow>();
+                services.AddTransient<AdminWindow>();
+                services.AddTransient<StaffWindow>();
+                services.AddTransient<ClientWindow>();
 
                 //ViewModels
                 services.AddTransient<LoginViewModel>();
+                services.AddTransient<SignupViewModel>();
 
                 //Services
                 services.AddTransient<WindowService>();
+                services.AddTransient<ActiveUserService>();
+                services.AddTransient<LoginService>();
+                services.AddTransient<SignupService>();
 
             })
             .Build();
