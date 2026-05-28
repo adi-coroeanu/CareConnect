@@ -1,4 +1,4 @@
 <Solution>
   <Project Path="CareConnect.Model/CareConnect.Model.csproj" />
-  <Project Path="CareConnect.View/CareConnect.WPF.csproj" />
+  <Project Path="CareConnect.WPF/CareConnect.WPF.csproj" />
 </Solution>

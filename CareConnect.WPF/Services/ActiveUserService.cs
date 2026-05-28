@@ -1,8 +1,8 @@
 ﻿using CareConnect.Model.Models;
-using CareConnect.View.Services;
 using CareConnect.WPF.Views;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Windows;
 
@@ -10,11 +10,11 @@ namespace CareConnect.WPF.Services
 {
     public class ActiveUserService
     {
-        private readonly WindowService _windowService;
+        private readonly NavigationService _windowService;
 
         public User? ActiveUser { get; set; }
 
-        public ActiveUserService(WindowService windowService)
+        public ActiveUserService(NavigationService windowService)
         {
             _windowService = windowService;
         }
@@ -35,8 +35,21 @@ namespace CareConnect.WPF.Services
                     _windowService.OpenWindow<ClientWindow>();
                     break;
             }
+        }
 
+        public string GreetingMessage()
+        {
+            string greeting;
+            var hour = DateTime.Now.Hour;
 
+            if (hour < 12)
+                greeting = "Good morning";
+            else if (hour < 18)
+                greeting = "Good afternoon";
+            else
+                greeting = "Good evening";
+
+            return $"{greeting}, {ActiveUser!.FirstName} {ActiveUser!.LastName}";
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using CareConnect.Model.Services;
-using CareConnect.View.Services;
-using CareConnect.View.Views;
 using CareConnect.ViewModel.Commands;
-using CareConnect.ViewModel.Services;
 using CareConnect.WPF.Services;
 using CareConnect.WPF.Views;
 using System;
@@ -20,7 +17,7 @@ namespace CareConnect.WPF.ViewModels
 {
     public class LoginViewModel : NotifyPropertyService
     {
-        private readonly WindowService _windowService;
+        private readonly NavigationService _navigationService;
         private readonly LoginService _loginService;
         private readonly ActiveUserService _activeUserService;
 
@@ -31,9 +28,9 @@ namespace CareConnect.WPF.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand SignupCommand { get; }
 
-        public LoginViewModel(WindowService windowService, LoginService loginService, ActiveUserService activeUserService)
+        public LoginViewModel(NavigationService windowService, LoginService loginService, ActiveUserService activeUserService)
         {
-            _windowService = windowService;
+            _navigationService = windowService;
             _loginService = loginService;
             _activeUserService = activeUserService;
 
@@ -83,7 +80,7 @@ namespace CareConnect.WPF.ViewModels
             {
                 _activeUserService.ActiveUser = user;
                 _activeUserService.OpenActiveUserWindow();
-                _windowService.CloseWindow<LoginWindow>();
+                _navigationService.CloseWindow<LoginWindow>();
             }
 
             Email = string.Empty;
@@ -97,9 +94,9 @@ namespace CareConnect.WPF.ViewModels
         }
         private void Signup(object? parameter)
         {
-            _windowService.OpenWindow<SignupWindow>();
+            _navigationService.OpenWindow<SignupWindow>();
 
-            _windowService.CloseWindow<LoginWindow>();
+            _navigationService.CloseWindow<LoginWindow>();
         }
 
     }

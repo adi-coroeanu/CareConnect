@@ -1,10 +1,9 @@
 ﻿using CareConnect.Model.Models;
 using CareConnect.Model.Services;
-using CareConnect.View.Services;
-using CareConnect.View.Views;
+using CareConnect.WPF.Views;
 using CareConnect.WPF.Services;
 using CareConnect.WPF.ViewModels;
-using CareConnect.WPF.Views;
+using CareConnect.WPF.ViewModels.UserControls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using System.Net.Sockets;
 using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
-using System.Windows.Navigation;
+using CareConnect.WPF.Views.UserControls;
 
 namespace CareConnect.View;
 
@@ -40,16 +39,26 @@ public partial class App
                 services.AddTransient<AdminWindow>();
                 services.AddTransient<StaffWindow>();
                 services.AddTransient<ClientWindow>();
+                services.AddTransient<AccountSettingsView>();
 
                 //ViewModels
                 services.AddTransient<LoginViewModel>();
                 services.AddTransient<SignupViewModel>();
+                services.AddTransient<ClientViewModel>();
+                services.AddTransient<HomeClientViewModel>();
+                services.AddTransient<AppointmentsClientViewModel>();
+                services.AddTransient<PaymentsClientViewModel>();
+                services.AddTransient<AccountSettingsViewModel>();
 
                 //Services
-                services.AddTransient<WindowService>();
-                services.AddTransient<ActiveUserService>();
+                services.AddTransient<NavigationService>();
+                services.AddSingleton<ActiveUserService>();
                 services.AddTransient<LoginService>();
                 services.AddTransient<SignupService>();
+                services.AddTransient<HomeClientService>();
+                services.AddTransient<AppointmentsClientService>();
+                services.AddTransient<AccountSettingsService>();
+                services.AddTransient<PaymentsClientService>();
 
             })
             .Build();
@@ -59,7 +68,7 @@ public partial class App
     {
         _host.StartAsync();
 
-        var loginWindow = _host.Services.GetRequiredService<LoginWindow>();
+        var loginWindow = _host.Services.GetRequiredService<LoginWindow>(); //!!!!!!
         loginWindow.Show();
     }
 

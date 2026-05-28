@@ -80,6 +80,7 @@ namespace CareConnect.Model.Services
             };
 
             _modelContext.Users.Add(newUser);
+            _modelContext.SaveChanges();
 
             return newUser;
         }

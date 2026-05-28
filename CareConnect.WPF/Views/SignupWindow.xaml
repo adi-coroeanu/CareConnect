@@ -1,13 +1,13 @@
-﻿<Window x:Class="CareConnect.View.Views.SignupWindow"
+﻿<Window x:Class="CareConnect.WPF.Views.SignupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CareConnect.View.Views"
+        xmlns:local="clr-namespace:CareConnect.WPF.Views"
         mc:Ignorable="d"
         xmlns:viewmodels="clr-namespace:CareConnect.WPF.ViewModels"
         d:DataContext="{d:DesignInstance Type=viewmodels:SignupViewModel, IsDesignTimeCreatable=False}"
-        Title="Signup" Height="500" Width="800">
+        Title="Signup" WindowStartupLocation="CenterScreen" Height="500" Width="800">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
@@ -37,7 +37,7 @@
                         <TextBox Text="{Binding StaffCode}" HorizontalAlignment="Right" Width="80" Padding="2"/>
                     </Grid>
                     <TextBlock Text="Incorrect code!" Foreground="Red" Visibility="{Binding CodeError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Button Content="Sign up" Command="{Binding SignupCommand}" Padding="5" FontSize="15" Margin="0 10 0 0"/>
+                    <Button Content="Sign up" Command="{Binding SignupCommand}" Padding="5" FontSize="15" Margin="0 10 0 10"/>
                 </StackPanel>
             </Border>
         </Grid>

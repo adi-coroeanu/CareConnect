@@ -1,16 +1,18 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Security.RightsManagement;
 using System.Text;
 using System.Windows;
 
-namespace CareConnect.View.Services
+namespace CareConnect.WPF.Services
 {
-    public class WindowService
+    public class NavigationService
     {
         private IServiceProvider _serviceProvider;
-        public WindowService(IServiceProvider serviceProvider) 
+        public NavigationService(IServiceProvider serviceProvider) 
         { 
             _serviceProvider = serviceProvider;
         }
@@ -19,9 +21,7 @@ namespace CareConnect.View.Services
             var objWindow = _serviceProvider.GetRequiredService<TWindow>();
 
             if (objWindow is Window window)
-            {
                 window.Show();
-            }
 
             else
                 throw new Exception($"This type of window {nameof(TWindow)} doesn't exist!");
@@ -37,6 +37,27 @@ namespace CareConnect.View.Services
                 throw new Exception($"This type of window {nameof(TWindow)} is not created!");
         }
 
+        public object? GetUserControlViewModel<TUserControl>() where TUserControl : class
+        {
+            try
+            {
+                return _serviceProvider.GetRequiredService<TUserControl>();
+            }
+            catch(Exception)
+            {
+                throw new Exception($"This type of user control viewModel {nameof(TUserControl)} doesn't exist!");
+            }
+        }
 
+        public void OpenDialogWindow<TWindow>() where TWindow : class
+        {
+            var objWindow = _serviceProvider.GetRequiredService<TWindow>();
+
+            if (objWindow is Window window)
+                window.ShowDialog();
+
+            else
+                throw new Exception($"This type of window {nameof(TWindow)} doesn't exist!");
+        }
     }
 }

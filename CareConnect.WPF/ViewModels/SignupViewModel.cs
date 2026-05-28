@@ -1,9 +1,7 @@
 ﻿using CareConnect.Model.Services;
-using CareConnect.View.Services;
-using CareConnect.View.Views;
 using CareConnect.ViewModel.Commands;
-using CareConnect.ViewModel.Services;
 using CareConnect.WPF.Services;
+using CareConnect.WPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,7 +13,7 @@ namespace CareConnect.WPF.ViewModels
     {
         private readonly SignupService _signupService;
         private readonly ActiveUserService _activeUserService;
-        private readonly WindowService _windowService;
+        private readonly NavigationService _navigationService;
 
         private string? _email;
         private string? _firstName;
@@ -26,11 +24,11 @@ namespace CareConnect.WPF.ViewModels
 
         public ICommand SignupCommand { get; }
 
-        public SignupViewModel(SignupService signupService, ActiveUserService activeUserService, WindowService windowService)
+        public SignupViewModel(SignupService signupService, ActiveUserService activeUserService, NavigationService windowService)
         {
             _signupService = signupService;
             _activeUserService = activeUserService;
-            _windowService = windowService;
+            _navigationService = windowService;
 
             SignupCommand = new RelayCommand(Signup, CanSignup);
         }
@@ -163,7 +161,7 @@ namespace CareConnect.WPF.ViewModels
                     _activeUserService.ActiveUser = user;
                     _activeUserService.OpenActiveUserWindow();
 
-                    _windowService.CloseWindow<SignupWindow>();
+                    _navigationService.CloseWindow<SignupWindow>();
                 }
             }
 

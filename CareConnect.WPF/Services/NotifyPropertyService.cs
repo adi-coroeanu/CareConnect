@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace CareConnect.ViewModel.Services
+namespace CareConnect.WPF.Services
 {
     public abstract class NotifyPropertyService : INotifyPropertyChanged
     {

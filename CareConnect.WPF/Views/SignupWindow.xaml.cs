@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace CareConnect.View.Views
+namespace CareConnect.WPF.Views
 {
     public partial class SignupWindow : Window
     {

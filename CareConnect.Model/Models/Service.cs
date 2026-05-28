@@ -13,6 +13,10 @@ public partial class Service
 
     public decimal EstTimeMinutes { get; set; }
 
+    public string TimeStart { get; set; } = null!;
+
+    public string TimeEnd { get; set; } = null!;
+
     public decimal Price { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
