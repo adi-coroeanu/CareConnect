@@ -9,9 +9,12 @@ namespace CareConnect.Model.Services
     public class SignupService
     {
         private readonly ModelContext _modelContext;
-        public SignupService(ModelContext modelContext) 
+        private readonly AuditService _auditService;
+
+        public SignupService(ModelContext modelContext, AuditService auditService) 
         {
             _modelContext = modelContext;
+            _auditService = auditService;
         }
 
         public bool AllFieldsCompleted(string? email, string? firstName, string? lastName, string? password, string? repassword)
@@ -81,6 +84,8 @@ namespace CareConnect.Model.Services
 
             _modelContext.Users.Add(newUser);
             _modelContext.SaveChanges();
+
+            _auditService.Log($"New account created [UserRole: {newUser.UserRole}]", newUser.Id);
 
             return newUser;
         }

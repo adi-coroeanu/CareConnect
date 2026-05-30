@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="CareConnect.WPF.Views.UserControls.CodeAdminUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CareConnect.WPF.Views.UserControls"
+             mc:Ignorable="d" 
+             xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
+             d:DataContext="{d:DesignInstance Type=controlsviewmodels:CodeAdminViewModel, IsDesignTimeCreatable=False}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <Grid Background="#F4F6F9">
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel>
+                <TextBox Text="{Binding CodeText}" FontSize="30" HorizontalAlignment="Stretch" Margin="0 0 0 5" IsReadOnly="True"/>
+                <Button Content="Generate code" Command="{Binding GenerateCodeCommand}" Padding="5" FontSize="20" Margin="0 5 0 5" MinWidth="190"/>
+                <TextBlock Text="You already have a generated code!" Visibility="{Binding ExistingCodeError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Foreground="Red"/>
+            </StackPanel>
+        </Grid>
+            
+    </Grid>
+</UserControl>

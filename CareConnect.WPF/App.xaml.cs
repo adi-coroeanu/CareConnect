@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
 using CareConnect.WPF.Views.UserControls;
+using CareConnect.WPF.Workers;
 
 namespace CareConnect.View;
 
@@ -49,6 +50,16 @@ public partial class App
                 services.AddTransient<AppointmentsClientViewModel>();
                 services.AddTransient<PaymentsClientViewModel>();
                 services.AddTransient<AccountSettingsViewModel>();
+                services.AddTransient<StaffViewModel>();
+                services.AddTransient<AppointmentsStaffViewModel>();
+                services.AddTransient<ServicesStaffViewModel>();
+                services.AddTransient<PaymentsStaffViewModel>();
+                services.AddTransient<ServicesStaffViewModel>();
+                services.AddTransient<StatsAdminViewModel>();
+                services.AddTransient<UsersAdminViewModel>();
+                services.AddTransient<CodeAdminViewModel>();
+                services.AddTransient<AuditAdminViewModel>();
+                services.AddTransient<AdminViewModel>();
 
                 //Services
                 services.AddTransient<NavigationService>();
@@ -59,7 +70,15 @@ public partial class App
                 services.AddTransient<AppointmentsClientService>();
                 services.AddTransient<AccountSettingsService>();
                 services.AddTransient<PaymentsClientService>();
+                services.AddTransient<AppointmentsStaffService>();
+                services.AddTransient<ServiceStaffService>();
+                services.AddTransient<PaymentsStaffService>();
+                services.AddTransient<CodeAdminService>();
+                services.AddTransient<UsersAdminService>();
+                services.AddSingleton<AuditService>();
 
+                //Workers
+                services.AddHostedService<CodesWorker>();
             })
             .Build();
     }

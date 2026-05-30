@@ -9,10 +9,12 @@ namespace CareConnect.Model.Services
     public class AccountSettingsService
     {
         private readonly ModelContext _modelContext;
+        private readonly AuditService _auditService;
 
-        public AccountSettingsService(ModelContext modelContext) 
+        public AccountSettingsService(ModelContext modelContext, AuditService auditService) 
         {
             _modelContext = modelContext;
+            _auditService = auditService;
         }
 
         public bool ExistingEmail(string? email, string activeUserId)
@@ -81,6 +83,7 @@ namespace CareConnect.Model.Services
             if(changed)
             {
                 _modelContext.SaveChanges();
+                _auditService.Log("Changed account credentials", activeUser.Id);
                 return true;
             }
 

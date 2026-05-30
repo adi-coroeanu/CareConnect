@@ -5,8 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CareConnect.WPF.Views"
         mc:Ignorable="d"
-        Title="AdminWindow" Height="450" Width="800">
-    <Grid>
-        
+        xmlns:controls="clr-namespace:CareConnect.WPF.Views.UserControls"
+        xmlns:viewmodels="clr-namespace:CareConnect.WPF.ViewModels"
+        xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
+        Title="Admin" WindowStartupLocation="CenterScreen" Height="650" Width="1000">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type controlsviewmodels:StatsAdminViewModel}">
+            <controls:StatsAdminUserControl />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type controlsviewmodels:UsersAdminViewModel}">
+            <controls:UsersAdminUserControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type controlsviewmodels:CodeAdminViewModel}">
+            <controls:CodeAdminUserControl/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type controlsviewmodels:AuditAdminViewModel}">
+            <controls:AuditAdminUserControl/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Background="#F8F9FA">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="170"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="{Binding GreetingMessage}" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="10 0 0 0"/>
+            <Button Content="Sign out" Command="{Binding SignoutCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" Padding="12"/>
+            <ContentControl Grid.Row="1" Content="{Binding CurrentUserControlViewModel}" Margin="10"/>
+        </Grid>
+
+        <Border Grid.Column="1" VerticalAlignment="Center" CornerRadius="10 0 0 10" Background="#E3F2FD" Padding="10">
+            <ListBox SelectedValuePath="Content" SelectedValue="{Binding SelectedItemSideBar}" Background="Transparent" BorderThickness="0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="FontSize" Value="15"/>
+                        <Setter Property="Padding" Value="10"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Black"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBoxItem Content="Stats"/>
+                <ListBoxItem Content="Edit users"/>
+                <ListBoxItem Content="Generate code"/>
+                <ListBoxItem Content="Audit"/>
+                <ListBoxItem Content="Settings"/>
+            </ListBox>
+        </Border>
     </Grid>
 </Window>

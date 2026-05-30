@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CareConnect.WPF.Views.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:HomeClientViewModel, IsDesignTimeCreatable=False}"
@@ -41,16 +42,9 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Text="Select date:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-            <DatePicker Grid.Column="1" SelectedDate="{Binding SelectedDate}" VerticalAlignment="Center" Width="Auto" HorizontalAlignment="Left" Margin="5 0 0 0"/>
-            <TextBlock Grid.Column="2" Text="Payment method" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-            <ComboBox Grid.Column="3" SelectedValuePath="Content" SelectedValue="{Binding SelectedPaymentType}" VerticalAlignment="Center" Width="Auto" HorizontalAlignment="Stretch" Margin="5,0,20,0">
-                <ComboBoxItem Content="Cash"/>
-                <ComboBoxItem Content="Card"/>
-            </ComboBox>
+            <DatePicker Grid.Column="1" SelectedDate="{Binding SelectedDate}"  VerticalAlignment="Center" Width="Auto" HorizontalAlignment="Left" Margin="5 0 0 0"/>
         </Grid>
 
         <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding FreePeriodsList}" SelectedItem="{Binding SelectedPeriod}" Margin="20 0 0 0">

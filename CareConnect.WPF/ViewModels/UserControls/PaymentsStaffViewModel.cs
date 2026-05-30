@@ -11,45 +11,30 @@ using System.Windows.Input;
 
 namespace CareConnect.WPF.ViewModels.UserControls
 {
-    public class PaymentsClientViewModel : NotifyPropertyService
+    public class PaymentsStaffViewModel : NotifyPropertyService
     {
         private readonly ModelContext _modelContext;
         private readonly ActiveUserService _activeUserService;
-        private readonly PaymentsClientService _paymentsClientService;
+        private readonly PaymentsStaffService _paymentsStaffService;
 
         private string _selectedPaymentMethod;
-        private bool _cashMethodError = false;
         private bool _invalidAmmountError = false;
         private string? _ammountValue;
 
         public ICommand PayCommand { get; }
 
-        public ObservableCollection<Payment> PaymentsHistoryList { get; set; }
         public ObservableCollection<Booking> PendingPaymentsList { get; set; }
         public Booking? SelectedPendingPayment { get; set; }
 
-        public PaymentsClientViewModel(ModelContext modelContext, ActiveUserService activeUserService, PaymentsClientService paymentsClientService) 
+        public PaymentsStaffViewModel(ModelContext modelContext, ActiveUserService activeUserService, PaymentsStaffService paymentsStaffService)
         {
             _modelContext = modelContext;
             _activeUserService = activeUserService;
-            _paymentsClientService = paymentsClientService;
+            _paymentsStaffService = paymentsStaffService;
 
             _selectedPaymentMethod = "Card";
-            PaymentsHistoryList = new ObservableCollection<Payment>(_paymentsClientService.GetPaymentsHistory(_activeUserService.ActiveUser!.Id));
-            PendingPaymentsList = new ObservableCollection<Booking>(_paymentsClientService.GetPendingPayments(_activeUserService.ActiveUser!.Id));
+            PendingPaymentsList = new ObservableCollection<Booking>(_paymentsStaffService.GetPendingPayments(_activeUserService.ActiveUser!.Id));
             PayCommand = new RelayCommand(Pay, CanPay);
-        }
-
-        public bool CashMethodError
-        {
-            get => _cashMethodError;
-            set
-            {
-                _cashMethodError = value;
-
-                OnPropertyChanged(nameof(CashMethodError));
-                ((RelayCommand)PayCommand).Refresh();
-            }
         }
 
         public bool InvalidAmmountError
@@ -71,11 +56,6 @@ namespace CareConnect.WPF.ViewModels.UserControls
             {
                 _selectedPaymentMethod = value;
 
-                if (_selectedPaymentMethod == "Cash")
-                    CashMethodError = true;
-                else
-                    CashMethodError = false;
-
                 OnPropertyChanged();
             }
         }
@@ -96,7 +76,7 @@ namespace CareConnect.WPF.ViewModels.UserControls
 
                 decimal ammount;
 
-                if(decimal.TryParse(_ammountValue, out ammount) && SelectedPendingPayment != null)
+                if (decimal.TryParse(_ammountValue, out ammount) && SelectedPendingPayment != null)
                 {
                     if (ammount > SelectedPendingPayment.TotalAmmount)
                         InvalidAmmountError = true;
@@ -113,15 +93,13 @@ namespace CareConnect.WPF.ViewModels.UserControls
 
         private void Pay(object? parameter)
         {
-            _paymentsClientService.GeneratePayment(SelectedPendingPayment!.Id, decimal.Parse(AmmountValue!), SelectedPaymentMethod, _activeUserService.ActiveUser!.Id);
+            _paymentsStaffService.GeneratePayment(SelectedPendingPayment!.Id, decimal.Parse(AmmountValue!), SelectedPaymentMethod, _activeUserService.ActiveUser.Id);
 
-            PaymentsHistoryList = new ObservableCollection<Payment>(_paymentsClientService.GetPaymentsHistory(_activeUserService.ActiveUser!.Id));
-            PendingPaymentsList = new ObservableCollection<Booking>(_paymentsClientService.GetPendingPayments(_activeUserService.ActiveUser!.Id));
+            PendingPaymentsList = new ObservableCollection<Booking>(_paymentsStaffService.GetPendingPayments(_activeUserService.ActiveUser!.Id));
 
             AmmountValue = string.Empty;
             OnPropertyChanged(nameof(AmmountValue));
 
-            OnPropertyChanged(nameof(PaymentsHistoryList));
             OnPropertyChanged(nameof(PendingPaymentsList));
 
             MessageBox.Show("Payment has been made!");
@@ -129,7 +107,7 @@ namespace CareConnect.WPF.ViewModels.UserControls
 
         private bool CanPay(object? parameter)
         {
-            if (CashMethodError || InvalidAmmountError || string.IsNullOrWhiteSpace(AmmountValue))
+            if (InvalidAmmountError || string.IsNullOrWhiteSpace(AmmountValue))
                 return false;
             return true;
         }

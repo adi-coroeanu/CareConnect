@@ -1,5 +1,4 @@
-﻿using CareConnect.WPF.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -9,20 +8,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace CareConnect.WPF.Views
+namespace CareConnect.WPF.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for AdminWindow.xaml
+    /// Interaction logic for CodeAdminUserControl.xaml
     /// </summary>
-    public partial class AdminWindow : Window
+    public partial class CodeAdminUserControl : UserControl
     {
-        public AdminWindow(AdminViewModel adminViewModel)
+        public CodeAdminUserControl()
         {
             InitializeComponent();
-
-            DataContext = adminViewModel;
         }
     }
 }

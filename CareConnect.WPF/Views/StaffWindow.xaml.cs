@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CareConnect.WPF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -12,14 +13,13 @@ using System.Windows.Shapes;
 
 namespace CareConnect.WPF.Views
 {
-    /// <summary>
-    /// Interaction logic for StaffWindow.xaml
-    /// </summary>
     public partial class StaffWindow : Window
     {
-        public StaffWindow()
+        public StaffWindow(StaffViewModel staffViewModel)
         {
             InitializeComponent();
+
+            DataContext = staffViewModel;
         }
     }
 }

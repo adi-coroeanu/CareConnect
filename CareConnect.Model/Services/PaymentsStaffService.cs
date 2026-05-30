@@ -6,32 +6,25 @@ using System.Text;
 
 namespace CareConnect.Model.Services
 {
-    public class PaymentsClientService
+    public class PaymentsStaffService
     {
         private readonly ModelContext _modelContext;
         private readonly AuditService _auditService;
 
-        public PaymentsClientService(ModelContext modelContext, AuditService auditService)
+        public PaymentsStaffService(ModelContext modelContext, AuditService auditService)
         {
             _modelContext = modelContext;
             _auditService = auditService;
         }
 
-        public List<Payment> GetPaymentsHistory(string userId)
+        public List<Booking> GetPendingPayments(string staffId)
         {
-            var userPayments = _modelContext.Payments.Include(p => p.IdBookingNavigation).Where(p => p.IdBookingNavigation!.IdUser == userId).OrderByDescending(p => p.PaymentDate).ToList();
-
-            return userPayments;
-        }
-
-        public List<Booking> GetPendingPayments(string userId)
-        {
-            var userPendingPayments = _modelContext.Bookings.Where(b => b.IdUser == userId && b.BookingDate > DateTime.Now && b.TotalAmmount > 0).OrderByDescending(b => b.BookingDate).ToList();
+            var userPendingPayments = _modelContext.Bookings.Include(b => b.IdServiceNavigation).Where(b => b.IdServiceNavigation!.IdDoctor == staffId && b.BookingDate >= DateTime.Today && b.TotalAmmount > 0).OrderBy(b => b.BookingDate).ToList();
 
             return userPendingPayments;
         }
 
-        public void GeneratePayment(string bookingId, decimal paymentValue, string paymentType, string userId)
+        public void GeneratePayment(string bookingId, decimal paymentValue, string paymentType, string staffId)
         {
             var currentBooking = _modelContext.Bookings.Where(b => b.Id == bookingId).First();
 
@@ -50,7 +43,7 @@ namespace CareConnect.Model.Services
 
             _modelContext.SaveChanges();
 
-            _auditService.Log($"User paid {paymentValue} lei for [BookingId: {bookingId}]", userId);
+            _auditService.Log($"(Staff transaction) paid {paymentValue} for [BookingId: {bookingId}]", staffId);
         }
     }
 }

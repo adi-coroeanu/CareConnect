@@ -10,9 +10,11 @@ namespace CareConnect.Model.Services
     public class HomeClientService
     {
         private readonly ModelContext _modelContext;
-        public HomeClientService(ModelContext modelContext) 
+        private readonly AuditService _auditService;
+        public HomeClientService(ModelContext modelContext, AuditService auditService) 
         {
             _modelContext = modelContext;
+            _auditService = auditService;
         }
 
         public List<Service> GetServices()
@@ -85,6 +87,8 @@ namespace CareConnect.Model.Services
 
             _modelContext.Bookings.Add(newBooking);
             _modelContext.SaveChanges();
+            
+            _auditService.Log($"Made an appointment [AppointmentId: {newBooking.Id}]", idClient);
         }
     }
 }

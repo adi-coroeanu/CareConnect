@@ -9,5 +9,7 @@ public partial class Code
 
     public string? IdUser { get; set; }
 
+    public DateTime DateCreated { get; set; }
+
     public virtual User? IdUserNavigation { get; set; }
 }
