@@ -76,6 +76,7 @@ public partial class App
                 services.AddTransient<CodeAdminService>();
                 services.AddTransient<UsersAdminService>();
                 services.AddSingleton<AuditService>();
+                services.AddTransient<AuditAdminService>();
 
                 //Workers
                 services.AddHostedService<CodesWorker>();
@@ -87,7 +88,7 @@ public partial class App
     {
         _host.StartAsync();
 
-        var loginWindow = _host.Services.GetRequiredService<LoginWindow>(); //!!!!!!
+        var loginWindow = _host.Services.GetRequiredService<LoginWindow>();
         loginWindow.Show();
     }
 
