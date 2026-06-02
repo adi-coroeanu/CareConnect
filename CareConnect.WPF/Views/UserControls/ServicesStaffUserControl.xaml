@@ -12,66 +12,215 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid Background="#F4F6F9">
+
+    <Grid Background="#F0F4F8">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Your services" FontSize="20" VerticalAlignment="Center"/>
-        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StaffServicesList}" SelectedItem="{Binding SelectedService}" AutoGenerateColumns="False" CanUserAddRows="False">
+
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Your Services"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Create Service"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <DataGrid Grid.Column="0" Grid.Row="1"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding StaffServicesList}"
+                  SelectedItem="{Binding SelectedService}"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  Margin="15 15 8 0"
+                  Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                  RowBackground="White" AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column" SelectionMode="Single" CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                 <DataGridTextColumn Header="Open time" Binding="{Binding TimeStart}" Width="*"/>
                 <DataGridTextColumn Header="Close time" Binding="{Binding TimeEnd}" Width="*"/>
-                <DataGridTextColumn Header="Duration" Binding="{Binding EstTimeMinutes, StringFormat='{}{0} minutes'}" Width="*"/>
+                <DataGridTextColumn Header="Duration" Binding="{Binding EstTimeMinutes, StringFormat='{}{0} min'}" Width="*"/>
                 <DataGridTextColumn Header="Price" Binding="{Binding Price, StringFormat='{}{0} lei'}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Row="2" Grid.Column="0" Command="{Binding DeleteServiceCommand}" Content="Delete service" HorizontalAlignment="Center" Padding="10" Margin="0 5 0 0"/>
+        <Border Grid.Column="0" Grid.Row="2" Margin="15 8 8 15">
+            <Button Command="{Binding DeleteServiceCommand}" HorizontalAlignment="Stretch" Padding="0 10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Delete Service"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Background" Value="#E53935"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#C62828"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Create service" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <Grid Grid.Column="1" Grid.Row="1" Margin="5 0 0 0">
-            <Border Background="LightCyan" VerticalAlignment="Top" HorizontalAlignment="Center" CornerRadius="10" Padding="10" Margin="0 20 0 0">
-                <StackPanel>
-                    <Grid Margin="0 10 0 5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Name of service:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                        <TextBox Grid.Column="1" Text="{Binding ServiceName, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 5 0" MinWidth="80"/>
-                    </Grid>
+        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                CornerRadius="8" Margin="8 15 15 15"
+                VerticalAlignment="Top">
+            <StackPanel Margin="20 20">
 
+                <TextBlock Text="Service name"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 14">
+                    <TextBox Text="{Binding ServiceName, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="13" BorderThickness="0" Background="Transparent" Padding="8 6"/>
+                </Border>
 
-                    <materialDesign:TimePicker Is24Hours="True" WithSeconds="False" SelectedTime="{Binding OpeningTime}" materialDesign:HintAssist.Hint="Select opening time" MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <materialDesign:TimePicker Is24Hours="True" WithSeconds="False" SelectedTime="{Binding ClosingTime}" materialDesign:HintAssist.Hint="Select closing time" MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <Grid Margin="0 5 0 5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Minutes per appointment:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                        <TextBox Text="{Binding MinutesAppointment, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Center" Margin="5 0 20 0" MinWidth="50"/>
-                    </Grid>
-                    <TextBlock Text="Invalid minutes!" Foreground="Red" HorizontalAlignment="Center" Visibility="{Binding InvalidMinutesError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Grid Margin="0 5 0 5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Price (lei): " HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                        <TextBox Text="{Binding ServicePrice, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Center" Margin="5 0 20 0" MinWidth="50"/>
-                    </Grid>
-                    <TextBlock Text="Invalid price!" Foreground="Red" HorizontalAlignment="Center" Visibility="{Binding InvalidPriceError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Button Content="Create service" Command="{Binding CreateServiceCommand}" HorizontalAlignment="Center" Padding="10" Margin="0 10 0 10"/>
-                </StackPanel>
-            </Border>
-        </Grid>
+                <TextBlock Text="Opening time"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 14">
+                    <materialDesign:TimePicker Is24Hours="True" WithSeconds="False"
+                                              SelectedTime="{Binding OpeningTime}"
+                                              materialDesign:HintAssist.Hint="Select opening time"
+                                              BorderThickness="0" Background="Transparent"
+                                              Padding="4 2"/>
+                </Border>
+
+                <TextBlock Text="Closing time"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 14">
+                    <materialDesign:TimePicker Is24Hours="True" WithSeconds="False"
+                                              SelectedTime="{Binding ClosingTime}"
+                                              materialDesign:HintAssist.Hint="Select closing time"
+                                              BorderThickness="0" Background="Transparent"
+                                              Padding="4 2"/>
+                </Border>
+
+                <TextBlock Text="Minutes per appointment"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 4">
+                    <TextBox Text="{Binding MinutesAppointment, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="13" BorderThickness="0" Background="Transparent" Padding="8 6"/>
+                </Border>
+                <TextBlock Text="Invalid minutes!"
+                           Foreground="#E53935" FontSize="11" HorizontalAlignment="Center"
+                           Margin="0 0 0 10"
+                           Visibility="{Binding InvalidMinutesError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <TextBlock Text="Price (lei)"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 4">
+                    <TextBox Text="{Binding ServicePrice, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="13" BorderThickness="0" Background="Transparent" Padding="8 6"/>
+                </Border>
+                <TextBlock Text="Invalid price!"
+                           Foreground="#E53935" FontSize="11" HorizontalAlignment="Center"
+                           Margin="0 0 0 10"
+                           Visibility="{Binding InvalidPriceError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <Button Command="{Binding CreateServiceCommand}"
+                        HorizontalAlignment="Stretch"
+                        Padding="0 12"
+                        Margin="0 5 0 0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Content" Value="Create Service"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Background" Value="#1976D2"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#1565C0"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

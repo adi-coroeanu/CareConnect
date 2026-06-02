@@ -8,23 +8,91 @@
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:AppointmentsClientViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#F4F6F9">
+    <Grid Background="#F0F4F8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="1" SelectedValuePath="Content" SelectedValue="{Binding SelectedPeriodAppointment}" HorizontalAlignment="Stretch" Margin="150 0 20 0">
-                <ComboBoxItem Content="All appointments"/>
-                <ComboBoxItem Content="Future appointments"/>
-                <ComboBoxItem Content="Past appointments"/>
-            </ComboBox>
-        </Grid>
-        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding AppointmentsList}" Margin="0 0 20 0" AutoGenerateColumns="False" CanUserAddRows="False" >
+
+        <Border Grid.Row="0" Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <Grid>
+                <TextBlock Text="Appointments"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#1A3C5E"
+                           VerticalAlignment="Center"/>
+                <ComboBox SelectedValuePath="Content"
+                          SelectedValue="{Binding SelectedPeriodAppointment}"
+                          HorizontalAlignment="Right"
+                          Width="180"
+                          Padding="8 5"
+                          FontSize="13"
+                          BorderBrush="#BBCFE8"
+                          Background="White">
+                    <ComboBoxItem Content="All appointments"/>
+                    <ComboBoxItem Content="Future appointments"/>
+                    <ComboBoxItem Content="Past appointments"/>
+                </ComboBox>
+            </Grid>
+        </Border>
+
+        <DataGrid Grid.Row="1"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding AppointmentsList}"
+                  Margin="15"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Background="White"
+                  BorderBrush="#DDEAF5"
+                  BorderThickness="1"
+                  RowBackground="White"
+                  AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date" Binding="{Binding BookingDate, StringFormat='{}{0:dd.MM.yyyy HH:mm}'}" Width="*"/>
                 <DataGridTextColumn Header="Service" Binding="{Binding IdServiceNavigation.Name}" Width="*"/>

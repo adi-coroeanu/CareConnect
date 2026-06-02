@@ -11,61 +11,215 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid Background="#F4F6F9">
+
+    <Grid Background="#F0F4F8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Payments history" FontSize="20" VerticalAlignment="Center"/>
-        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding PaymentsHistoryList}" AutoGenerateColumns="False" CanUserAddRows="False">
+
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Payment History"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Pending Payments"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E" VerticalAlignment="Center" Margin="5 0 0 0"/>
+                <TextBlock Grid.Column="2" Text="Pay Now"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E" VerticalAlignment="Center" Margin="5 0 0 0"/>
+            </Grid>
+        </Border>
+
+        <DataGrid Grid.Column="0" Grid.Row="1"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding PaymentsHistoryList}"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  Margin="15 15 8 15"
+                  Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                  RowBackground="White" AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column" SelectionMode="Single" CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate, StringFormat='{}{0:dd.MM.yyyy}'}"  Width="*"/>
-                <DataGridTextColumn Header="Name" Binding="{Binding IdBookingNavigation.IdServiceNavigation.Name}" Width="*"/>
-                <DataGridTextColumn Header="Sum" Binding="{Binding PaymentValue, StringFormat='{}{0} lei'}" Width="*"/>
-                <DataGridTextColumn Header="Type" Binding="{Binding PaymentType}" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="Pending Payments" FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"/>
-        <DataGrid Grid.Column="1" Grid.Row="1" ItemsSource="{Binding PendingPaymentsList}" SelectedItem="{Binding SelectedPendingPayment}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="5 0 0 0">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding IdServiceNavigation.Name}"  Width="*"/>
-                <DataGridTextColumn Header="Ammount" Binding="{Binding TotalAmmount, StringFormat='{}{0} lei'}"  Width="*"/>
+                <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate, StringFormat='{}{0:dd.MM.yyyy}'}" Width="3*"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding IdBookingNavigation.IdServiceNavigation.Name}" Width="3*"/>
+                <DataGridTextColumn Header="Sum" Binding="{Binding PaymentValue, StringFormat='{}{0} lei'}" Width="2*"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding PaymentType}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid Grid.Column="2" Grid.Row="1" Margin="5 0 0 0">
-            <Border Background="LightCyan" VerticalAlignment="Center" CornerRadius="10">
-                <StackPanel>
-                    <Grid Margin="0 10 0 5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Payment method" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                        <ComboBox Grid.Column="1" SelectedValuePath="Content" SelectedValue="{Binding SelectedPaymentMethod}" VerticalAlignment="Center" Width="Auto" HorizontalAlignment="Stretch" Margin="5,0,20,0">
-                            <ComboBoxItem Content="Card"/>
-                            <ComboBoxItem Content="Cash"/>
-                        </ComboBox>
-                    </Grid>
-                    <TextBlock Text="You can only pay cash in physical location!" Foreground="Red" HorizontalAlignment="Center" FontSize="10" Visibility="{Binding CashMethodError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Grid Margin="0 5 0 5">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Amount (lei):" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-                        <TextBox Text="{Binding AmmountValue, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" VerticalAlignment="Center" Margin="5 0 20 0"/>
-                    </Grid>
-                    <TextBlock Text="Invalid ammount!" Foreground="Red" HorizontalAlignment="Center" FontSize="10" Visibility="{Binding InvalidAmmountError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Button Content="Pay now" Command="{Binding PayCommand}" HorizontalAlignment="Center" Padding="10" Margin="0 10 0 10"/>
-                </StackPanel>
-            </Border>
-        </Grid>
+        <DataGrid Grid.Column="1" Grid.Row="1"
+                  ItemsSource="{Binding PendingPaymentsList}"
+                  SelectedItem="{Binding SelectedPendingPayment}"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  Margin="8 15 8 15"
+                  Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                  RowBackground="White" AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column" SelectionMode="Single" CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding IdServiceNavigation.Name}" Width="*"/>
+                <DataGridTextColumn Header="Amount" Binding="{Binding TotalAmmount, StringFormat='{}{0} lei'}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Border Grid.Column="2" Grid.Row="1"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                CornerRadius="8" Margin="8 15 15 15"
+                VerticalAlignment="Center">
+            <StackPanel Margin="20 20">
+
+                <TextBlock Text="Payment method"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <ComboBox SelectedValuePath="Content"
+                          SelectedValue="{Binding SelectedPaymentMethod}"
+                          Padding="8 5" FontSize="13"
+                          BorderBrush="#BBCFE8" Background="White"
+                          Margin="0 0 0 4">
+                    <ComboBoxItem Content="Card"/>
+                    <ComboBoxItem Content="Cash"/>
+                </ComboBox>
+                <TextBlock Text="You can only pay cash in physical location!"
+                           Foreground="#E53935" FontSize="8" HorizontalAlignment="Center"
+                           Margin="0 0 0 10"
+                           Visibility="{Binding CashMethodError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <TextBlock Text="Amount (lei)"
+                           FontSize="12" Foreground="#7A9BBF"
+                           FontWeight="SemiBold" Margin="0 0 0 5"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="5" Margin="0 0 0 4">
+                    <TextBox Text="{Binding AmmountValue, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="13" Foreground="#1A3C5E"
+                             BorderThickness="0" Background="Transparent"
+                             Padding="8 6"/>
+                </Border>
+                <TextBlock Text="Invalid amount!"
+                           Foreground="#E53935" FontSize="11" HorizontalAlignment="Center"
+                           Margin="0 0 0 10"
+                           Visibility="{Binding InvalidAmmountError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                <Button Command="{Binding PayCommand}"
+                        HorizontalAlignment="Stretch"
+                        Padding="0 12"
+                        Margin="0 5 0 0">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Content" Value="Pay Now"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Background" Value="#1976D2"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#1565C0"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

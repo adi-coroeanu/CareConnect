@@ -4,12 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CareConnect.WPF.Views.UserControls"
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:HomeClientViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#F4F6F9">
+    <Grid Background="#F0F4F8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
@@ -20,10 +19,82 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Column="0" Grid.Row="0" Text="Services" FontSize="20"/>
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="Free hours" FontSize="20" Margin="20 0 0 0"/>
+        <Border Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <Grid>
+                <TextBlock Text="Services"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#1A3C5E"
+                           VerticalAlignment="Center"/>
+                <TextBlock Text="Available Hours"
+                           FontSize="16"
+                           FontWeight="SemiBold"
+                           Foreground="#1A3C5E"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Margin="0 0 15 0"/>
+            </Grid>
+        </Border>
 
-        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding ServicesList}" SelectedItem="{Binding SelectedService}" Margin="0 0 20 0" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid Grid.Column="0" Grid.Row="1"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding ServicesList}"
+                  SelectedItem="{Binding SelectedService}"
+                  Margin="15 15 8 0"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Background="White"
+                  BorderBrush="#DDEAF5"
+                  BorderThickness="1"
+                  RowBackground="White"
+                  AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                 <DataGridTextColumn Header="Duration" Binding="{Binding EstTimeMinutes, StringFormat='{}{0} minutes'}" Width="*"/>
@@ -38,18 +109,104 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Grid.Column="0" Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0" Text="Select date:" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 5 0"/>
-            <DatePicker Grid.Column="1" SelectedDate="{Binding SelectedDate}"  VerticalAlignment="Center" Width="Auto" HorizontalAlignment="Left" Margin="5 0 0 0"/>
-        </Grid>
 
-        <ListBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding FreePeriodsList}" SelectedItem="{Binding SelectedPeriod}" Margin="20 0 0 0">
+        <Border Grid.Column="0" Grid.Row="2"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                CornerRadius="6" Margin="15 10 8 15" Padding="12 8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Select date:"
+                           FontSize="13"
+                           Foreground="#1A3C5E"
+                           FontWeight="SemiBold"
+                           VerticalAlignment="Center"
+                           Margin="0 0 10 0"/>
+                <DatePicker Grid.Column="1"
+                            SelectedDate="{Binding SelectedDate}"
+                            VerticalAlignment="Center"
+                            FontSize="13"
+                            BorderThickness="0"
+                            Background="Transparent"/>
+            </Grid>
+        </Border>
 
-        </ListBox>
-        <Button Grid.Column="1" Grid.Row="3" Command="{Binding MakeAppointmentCommand}" Content="Make appointment" HorizontalAlignment="Center" Padding="10" Margin="0 10 0 0"/>
+        <Border Grid.Column="1" Grid.Row="1"
+                Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                CornerRadius="6" Margin="8 15 15 0">
+            <ListBox ItemsSource="{Binding FreePeriodsList}"
+                     SelectedItem="{Binding SelectedPeriod}"
+                     Background="Transparent"
+                     BorderThickness="0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#2C3E50"/>
+                        <Setter Property="Padding" Value="15 10"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="ItemBorder"
+                                            Background="Transparent"
+                                            BorderThickness="3 0 0 0"
+                                            BorderBrush="Transparent"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#E3F0FB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#BBDEFB"/>
+                                            <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#1976D2"/>
+                                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Border>
+
+        <Border Grid.Column="1" Grid.Row="2" Margin="8 10 15 15">
+            <Button Command="{Binding MakeAppointmentCommand}"
+                    HorizontalAlignment="Stretch"
+                    Padding="0 12">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Make Appointment"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Background" Value="#1976D2"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="6"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1565C0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
     </Grid>
 </UserControl>

@@ -7,25 +7,84 @@
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:UsersAdminViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#F4F6F9">
+    <Grid Background="#F0F4F8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="1" SelectedValuePath="Content" SelectedValue="{Binding SelectedTypeUsers}" HorizontalAlignment="Stretch" Margin="150 0 20 0">
-                <ComboBoxItem Content="All users"/>
-                <ComboBoxItem Content="Staff"/>
-                <ComboBoxItem Content="Clients"/>
-                <ComboBoxItem Content="Admins"/>
-            </ComboBox>
-        </Grid>
-        <DataGrid Grid.Column="0" Grid.Row="1" ItemsSource="{Binding UsersList}" SelectedItem="{Binding SelectedUser}" Margin="0 0 20 0" AutoGenerateColumns="False" CanUserAddRows="False" >
+
+        <Border Grid.Row="0" Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <Grid>
+                <TextBlock Text="Users"
+                           FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E"
+                           VerticalAlignment="Center"/>
+                <ComboBox SelectedValuePath="Content"
+                          SelectedValue="{Binding SelectedTypeUsers}"
+                          HorizontalAlignment="Right"
+                          Width="160"
+                          Padding="8 5"
+                          FontSize="13"
+                          BorderBrush="#BBCFE8"
+                          Background="White">
+                    <ComboBoxItem Content="All users"/>
+                    <ComboBoxItem Content="Staff"/>
+                    <ComboBoxItem Content="Clients"/>
+                    <ComboBoxItem Content="Admins"/>
+                </ComboBox>
+            </Grid>
+        </Border>
+
+        <DataGrid Grid.Row="1"
+                  IsReadOnly="True"
+                  ItemsSource="{Binding UsersList}"
+                  SelectedItem="{Binding SelectedUser}"
+                  Margin="15 15 15 0"
+                  AutoGenerateColumns="False" CanUserAddRows="False"
+                  Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                  RowBackground="White" AlternatingRowBackground="#F7FAFD"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EAF0F8"
+                  HeadersVisibility="Column" SelectionMode="Single" CanUserResizeRows="False">
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="Background" Value="#1976D2"/>
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Padding" Value="12 8"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="FontSize" Value="13"/>
+                    <Setter Property="Foreground" Value="#2C3E50"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#E3F0FB"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#BBDEFB"/>
+                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="Padding" Value="12 6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.CellStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="2*"/>
                 <DataGridTextColumn Header="First name" Binding="{Binding FirstName}" Width="*"/>
@@ -34,6 +93,35 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Grid.Row="2" Content="Delete user" Command="{Binding DeleteUserCommand}" HorizontalAlignment="Center" Padding="15" Margin="0 5 0 0"/>
+        <Border Grid.Row="2" Margin="15 8 15 15">
+            <Button Command="{Binding DeleteUserCommand}" HorizontalAlignment="Stretch" Padding="0 10">
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Content" Value="Delete User"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="Background" Value="#E53935"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                                            CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#C62828"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Border>
     </Grid>
 </UserControl>

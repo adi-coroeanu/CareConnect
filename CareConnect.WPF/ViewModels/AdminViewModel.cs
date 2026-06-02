@@ -24,7 +24,7 @@ namespace CareConnect.WPF.ViewModels
             _navigationService = navigationService;
             _activeUserService = activeUserService;
 
-            CurrentUserControlViewModel = _navigationService.GetUserControlViewModel<HomeClientViewModel>();
+            CurrentUserControlViewModel = _navigationService.GetUserControlViewModel<StatsAdminViewModel>();
             _selectedItemSideBar = "Stats";
 
             SignoutCommand = new RelayCommand(Signout);

@@ -11,14 +11,83 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
-    <Grid Background="#F4F6F9">
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+
+    <Grid Background="#F0F4F8">
+
+        <Border VerticalAlignment="Top" Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <TextBlock Text="Generate Code"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="#1A3C5E"/>
+        </Border>
+
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="White"
+                BorderBrush="#DDEAF5"
+                BorderThickness="1"
+                CornerRadius="10"
+                Padding="35 30">
             <StackPanel>
-                <TextBox Text="{Binding CodeText}" FontSize="30" HorizontalAlignment="Stretch" Margin="0 0 0 5" IsReadOnly="True"/>
-                <Button Content="Generate code" Command="{Binding GenerateCodeCommand}" Padding="5" FontSize="20" Margin="0 5 0 5" MinWidth="190"/>
-                <TextBlock Text="You already have a generated code!" Visibility="{Binding ExistingCodeError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" Foreground="Red"/>
+
+                <TextBlock Text="Registration Code"
+                           FontSize="12"
+                           Foreground="#7A9BBF"
+                           FontWeight="SemiBold"
+                           Margin="0 0 0 6"/>
+                <Border BorderBrush="#BBCFE8" BorderThickness="1" CornerRadius="6" Background="#F7FAFD" Margin="0 0 0 16">
+                    <TextBox Text="{Binding CodeText}"
+                             FontSize="28"
+                             FontWeight="Bold"
+                             Foreground="#1A3C5E"
+                             HorizontalAlignment="Center"
+                             IsReadOnly="True"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             Padding="20 10"
+                             MinWidth="220"
+                             TextAlignment="Center"/>
+                </Border>
+
+                <Button Command="{Binding GenerateCodeCommand}"
+                        MinWidth="220"
+                        Padding="0 12">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Content" Value="Generate Code"/>
+                            <Setter Property="FontSize" Value="15"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="Background" Value="#1976D2"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="6"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#1565C0"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <TextBlock Text="You already have a generated code!"
+                           Visibility="{Binding ExistingCodeError, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Foreground="#E53935"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           Margin="0 10 0 0"/>
             </StackPanel>
-        </Grid>
-            
+        </Border>
     </Grid>
 </UserControl>

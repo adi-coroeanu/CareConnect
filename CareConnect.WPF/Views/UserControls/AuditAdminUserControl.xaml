@@ -8,15 +8,63 @@
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:AuditAdminViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#F4F6F9">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="150" MinHeight="300">
-            <ListBox ItemsSource="{Binding AuditList}" SelectedItem="{Binding SelectedAuditDate}">
+    <Grid Background="#F0F4F8">
+
+        <Border VerticalAlignment="Top" Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <TextBlock Text="Audit Log"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="#1A3C5E"/>
+        </Border>
+
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="White"
+                BorderBrush="#DDEAF5"
+                BorderThickness="1"
+                CornerRadius="8"
+                Padding="0"
+                MinWidth="220"
+                MinHeight="300">
+            <ListBox ItemsSource="{Binding AuditList}"
+                     SelectedItem="{Binding SelectedAuditDate}"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     MinWidth="220"
+                     MinHeight="300">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="FontSize" Value="13"/>
+                        <Setter Property="Foreground" Value="#2C3E50"/>
+                        <Setter Property="Padding" Value="20 10"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border x:Name="ItemBorder"
+                                            Background="Transparent"
+                                            BorderThickness="3 0 0 0"
+                                            BorderBrush="Transparent"
+                                            Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#E3F0FB"/>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter TargetName="ItemBorder" Property="Background" Value="#BBDEFB"/>
+                                            <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#1976D2"/>
+                                            <Setter Property="Foreground" Value="#1A3C5E"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
-        </Grid>
+        </Border>
     </Grid>
 </UserControl>

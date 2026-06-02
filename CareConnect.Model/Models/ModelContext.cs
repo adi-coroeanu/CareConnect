@@ -33,7 +33,7 @@ public partial class ModelContext : DbContext
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008836");
+            entity.HasKey(e => e.Id).HasName("SYS_C008951");
 
             entity.ToTable("BOOKINGS");
 
@@ -58,16 +58,18 @@ public partial class ModelContext : DbContext
 
             entity.HasOne(d => d.IdServiceNavigation).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.IdService)
-                .HasConstraintName("SYS_C008838");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("SYS_C008953");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("SYS_C008837");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("SYS_C008952");
         });
 
         modelBuilder.Entity<Code>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008847");
+            entity.HasKey(e => e.Id).HasName("SYS_C008962");
 
             entity.ToTable("CODES");
 
@@ -85,12 +87,12 @@ public partial class ModelContext : DbContext
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Codes)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("SYS_C008848");
+                .HasConstraintName("SYS_C008963");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008844");
+            entity.HasKey(e => e.Id).HasName("SYS_C008959");
 
             entity.ToTable("PAYMENTS");
 
@@ -115,16 +117,14 @@ public partial class ModelContext : DbContext
 
             entity.HasOne(d => d.IdBookingNavigation).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.IdBooking)
-                .HasConstraintName("SYS_C008845");
+                .HasConstraintName("SYS_C008960");
         });
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008831");
+            entity.HasKey(e => e.Id).HasName("SYS_C008947");
 
             entity.ToTable("SERVICES");
-
-            entity.HasIndex(e => e.Name, "SYS_C008832").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasMaxLength(36)
@@ -155,16 +155,17 @@ public partial class ModelContext : DbContext
 
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.Services)
                 .HasForeignKey(d => d.IdDoctor)
-                .HasConstraintName("SYS_C008833");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("SYS_C008948");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008824");
+            entity.HasKey(e => e.Id).HasName("SYS_C008940");
 
             entity.ToTable("USERS");
 
-            entity.HasIndex(e => e.Email, "SYS_C008825").IsUnique();
+            entity.HasIndex(e => e.Email, "SYS_C008941").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasMaxLength(36)

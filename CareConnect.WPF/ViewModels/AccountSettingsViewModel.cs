@@ -111,17 +111,21 @@ namespace CareConnect.WPF.ViewModels
                 OnPropertyChanged(nameof(EmailUsedError));
                 anyError = true;
             }
-            if(!_accountSettingsService.CorrectPasswordFormat(Password))
+
+            if (Password != null && Repassword != null)
             {
-                PasswordFormatError = true;
-                OnPropertyChanged(nameof(PasswordFormatError));
-                anyError = true;
-            }
-            if(!_accountSettingsService.MatchingPasswords(Password, Repassword))
-            {
-                PasswordMatchError = true;
-                OnPropertyChanged(nameof(PasswordMatchError));
-                anyError = true;
+                if (!_accountSettingsService.CorrectPasswordFormat(Password))
+                {
+                    PasswordFormatError = true;
+                    OnPropertyChanged(nameof(PasswordFormatError));
+                    anyError = true;
+                }
+                if (!_accountSettingsService.MatchingPasswords(Password, Repassword))
+                {
+                    PasswordMatchError = true;
+                    OnPropertyChanged(nameof(PasswordMatchError));
+                    anyError = true;
+                }
             }
 
             if (!anyError)
@@ -131,6 +135,7 @@ namespace CareConnect.WPF.ViewModels
             }
 
             ParametersChangedError = true;
+            OnPropertyChanged(nameof(ParametersChangedError));
         }
 
         private bool CanConfirmSettings(object? parameter)

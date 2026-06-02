@@ -9,14 +9,18 @@
              xmlns:controlsviewmodels="clr-namespace:CareConnect.WPF.ViewModels.UserControls"
              d:DataContext="{d:DesignInstance Type=controlsviewmodels:StatsAdminViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="#F4F6F9">
+    <Grid Background="#F0F4F8">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Statistics" FontSize="22" FontWeight="Bold" VerticalAlignment="Center" Margin="10 0 0 0"/>
+        <Border Grid.Row="0" Background="White" BorderBrush="#DDEAF5" BorderThickness="0 0 0 1" Padding="15 10">
+            <TextBlock Text="Statistics"
+                       FontSize="16" FontWeight="SemiBold" Foreground="#1A3C5E"
+                       VerticalAlignment="Center"/>
+        </Border>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -24,47 +28,72 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Background="White" CornerRadius="10" Margin="10" Padding="10">
+            <Border Grid.Column="0" Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                    CornerRadius="8" Margin="15 15 8 8" Padding="15">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Monthly Revenue" FontSize="16" FontWeight="Bold"/>
-                    <lvc:CartesianChart Grid.Row="1" Series="{Binding RevenueSeries}" XAxes="{Binding RevenueXAxes}"/>
+                    <TextBlock Grid.Row="0" Text="Monthly Revenue"
+                               FontSize="14" FontWeight="SemiBold"
+                               Foreground="#1A3C5E" Margin="0 0 0 8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding RevenueSeries}"
+                                        XAxes="{Binding RevenueXAxes}"/>
                 </Grid>
             </Border>
 
-            <Border Grid.Column="1" Background="White" CornerRadius="10" Margin="10" Padding="10">
+            <Border Grid.Column="1" Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+                    CornerRadius="8" Margin="8 15 15 8" Padding="15">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Text="Monthly Appointments" FontSize="16" FontWeight="Bold"/>
-                    <lvc:CartesianChart Grid.Row="1" Series="{Binding AppointmentsSeries}" XAxes="{Binding AppointmentsXAxes}"/>
+                    <TextBlock Grid.Row="0" Text="Monthly Appointments"
+                               FontSize="14" FontWeight="SemiBold"
+                               Foreground="#1A3C5E" Margin="0 0 0 8"/>
+                    <lvc:CartesianChart Grid.Row="1"
+                                        Series="{Binding AppointmentsSeries}"
+                                        XAxes="{Binding AppointmentsXAxes}"/>
                 </Grid>
             </Border>
         </Grid>
 
-        <Border Grid.Row="2" Background="White" CornerRadius="10" Margin="10" Padding="10">
+        <Border Grid.Row="2" Background="White" BorderBrush="#DDEAF5" BorderThickness="1"
+        CornerRadius="8" Margin="15 8 15 15" Padding="15">
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Most Popular Services" FontSize="16" FontWeight="Bold"/>
-                <lvc:PieChart Grid.Row="1" Grid.Column="0" Series="{Binding ServicesSeries}" Width="200" Height="200"/>
-                <ItemsControl Grid.Row="1" Grid.Column="1" ItemsSource="{Binding ServicesLegend}" VerticalAlignment="Center" Margin="10 0 0 0">
+
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                   Text="Most Popular Services"
+                   FontSize="14" FontWeight="SemiBold"
+                   Foreground="#1A3C5E" Margin="0 0 0 8"/>
+
+                <lvc:PieChart Grid.Row="1" Grid.Column="0"
+                      Series="{Binding ServicesSeries}"
+                      Width="150" Height="150"/>
+
+                <ItemsControl Grid.Row="1" Grid.Column="1"
+                      ItemsSource="{Binding ServicesLegend}"
+                      VerticalAlignment="Center" Margin="20 0 0 0">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
-                                <Border Width="15" Height="15" CornerRadius="3" Background="{Binding Color}" Margin="0 0 8 0"/>
-                                <TextBlock Text="{Binding Label}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" Margin="0 5 0 5">
+                                <Border Width="13" Height="13" CornerRadius="3"
+                                Background="{Binding Color}" Margin="0 0 10 0"
+                                VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Label}"
+                                   VerticalAlignment="Center"
+                                   FontSize="13" Foreground="#2C3E50"/>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
