@@ -42,5 +42,23 @@ namespace CareConnect.Model.Services
 
             _auditService.Log($"Deleted account [UserId: {userId}]", adminId);
         }
+
+        public string? VerifyLinkingObjects(string userId)
+        {
+            var selectedUser = _modelContext.Users.Where(u => u.Id == userId).First();
+            var bookingsCount = _modelContext.Bookings.Where(b => b.IdUser == userId && b.BookingDate > DateTime.Now).Count();
+            var servicesCount = _modelContext.Services.Where(s => s.IdDoctor == userId).Count();
+
+            if(bookingsCount > 0)
+            {
+                return "bookings";
+            }
+            if(servicesCount > 0) 
+            {
+                return "services";
+            }
+
+            return null;
+        }
     }
 }

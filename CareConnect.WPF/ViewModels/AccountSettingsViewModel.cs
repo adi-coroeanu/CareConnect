@@ -21,7 +21,11 @@ namespace CareConnect.WPF.ViewModels
         private string? _lastName;
         private string? _password;
         private string? _repassword;
+        private bool _emailUsedError = false;
+        private bool _passwordFormatError = false;
+        private bool _passwordMatchError = false;
         private bool _minimumOneParameterCanged = false;
+        private bool _parametersChangedError = false;
 
         public ICommand ConfirmSettingsCommand { get; }
         public AccountSettingsViewModel(ActiveUserService activeUserService, NavigationService navigationService, AccountSettingsService accountSettingsService) 
@@ -44,6 +48,7 @@ namespace CareConnect.WPF.ViewModels
                 EmailUsedError = false;
                 _minimumOneParameterCanged = true;
                 OnPropertyChanged(nameof(EmailUsedError));
+                OnPropertyChanged();
                 ((RelayCommand)ConfirmSettingsCommand).Refresh();
             }
         }
@@ -55,6 +60,7 @@ namespace CareConnect.WPF.ViewModels
             {
                 _firstName = value;
                 _minimumOneParameterCanged = true;
+                OnPropertyChanged();
                 ((RelayCommand)ConfirmSettingsCommand).Refresh();
             }
         }
@@ -65,6 +71,7 @@ namespace CareConnect.WPF.ViewModels
             {
                 _lastName = value;
                 _minimumOneParameterCanged = true;
+                OnPropertyChanged();
                 ((RelayCommand)ConfirmSettingsCommand).Refresh();
             }
         }
@@ -74,11 +81,15 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _password = value;
-                PasswordFormatError = false;
-                PasswordMatchError = false;
+
+                if (!string.IsNullOrWhiteSpace(_password))
+                {
+                    PasswordFormatError = false;
+                    PasswordMatchError = false;
+                }
+
                 _minimumOneParameterCanged = true;
-                OnPropertyChanged(nameof(PasswordFormatError));
-                OnPropertyChanged(nameof(PasswordMatchError));
+                OnPropertyChanged();
                 ((RelayCommand)ConfirmSettingsCommand).Refresh();
             }
         }
@@ -89,53 +100,90 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _repassword = value;
+
+                if (!string.IsNullOrWhiteSpace(_password))
+                {
+                    PasswordFormatError = false;
+                    PasswordMatchError = false;
+                }
+
                 _minimumOneParameterCanged = true;
-                PasswordMatchError = false;
-                OnPropertyChanged(nameof(PasswordMatchError));
+                OnPropertyChanged();
                 ((RelayCommand)ConfirmSettingsCommand).Refresh();
             }
         }
 
-        public bool EmailUsedError { get; set; } = false;
-        public bool PasswordFormatError { get; set; } = false;
-        public bool PasswordMatchError { get; set; } = false;
-        public bool ParametersChangedError { get; set; } = false;
+        public bool EmailUsedError
+        {
+            get => _emailUsedError;
+            set
+            {
+                _emailUsedError = value;
+
+                if (_emailUsedError)
+                    Email = string.Empty;
+
+                OnPropertyChanged();
+            }
+        }
+        public bool PasswordFormatError
+        {
+            get => _passwordFormatError;
+            set
+            {
+                _passwordFormatError = value;
+
+                if (_passwordFormatError)
+                {
+                    Password = string.Empty;
+                    Repassword = string.Empty;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+        public bool PasswordMatchError
+        {
+            get => _passwordMatchError;
+            set
+            {
+                _passwordMatchError = value;
+
+                if (_passwordMatchError)
+                {
+                    Password = string.Empty;
+                    Repassword = string.Empty;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+        public bool ParametersChangedError 
+        {
+            get => _parametersChangedError;
+            set
+            {
+                _parametersChangedError = value;
+
+                OnPropertyChanged();
+            }
+        }
 
         private void ConfirmSettings(object? parameter)
         {
-            bool anyError = false;
+            EmailUsedError = _accountSettingsService.ExistingEmail(Email, _activeUserService.ActiveUser!.Id);
 
-            if(_accountSettingsService.ExistingEmail(Email, _activeUserService.ActiveUser!.Id))
+            PasswordFormatError = !_accountSettingsService.CorrectPasswordFormat(Password);
+            PasswordMatchError = !_accountSettingsService.MatchingPasswords(Password, Repassword);
+
+            if (EmailUsedError || PasswordFormatError || PasswordMatchError)
             {
-                EmailUsedError = true;
-                OnPropertyChanged(nameof(EmailUsedError));
-                anyError = true;
+                ParametersChangedError = true;
+                return;
             }
 
-            if (Password != null && Repassword != null)
-            {
-                if (!_accountSettingsService.CorrectPasswordFormat(Password))
-                {
-                    PasswordFormatError = true;
-                    OnPropertyChanged(nameof(PasswordFormatError));
-                    anyError = true;
-                }
-                if (!_accountSettingsService.MatchingPasswords(Password, Repassword))
-                {
-                    PasswordMatchError = true;
-                    OnPropertyChanged(nameof(PasswordMatchError));
-                    anyError = true;
-                }
-            }
-
-            if (!anyError)
-            {
-                if (_accountSettingsService.SaveAccountSettings(_activeUserService.ActiveUser, Email, FirstName, LastName, Password))
-                    _navigationService.CloseWindow<AccountSettingsView>();
-            }
-
-            ParametersChangedError = true;
-            OnPropertyChanged(nameof(ParametersChangedError));
+            if (_accountSettingsService.SaveAccountSettings(_activeUserService.ActiveUser, Email, FirstName, LastName, Password))
+                _navigationService.CloseWindow<AccountSettingsView>();
         }
 
         private bool CanConfirmSettings(object? parameter)

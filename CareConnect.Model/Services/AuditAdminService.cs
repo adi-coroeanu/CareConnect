@@ -16,9 +16,18 @@ namespace CareConnect.Model.Services
 
         public List<string> GetAuditList()
         {
-            var AuditList = new List<string>(Directory.GetFiles(_auditService.AuditFolderPath).Select(Path.GetFileNameWithoutExtension)!);
+            try
+            {
+                var auditList = Directory.EnumerateFiles(_auditService.AuditFolderPath).Select(p => Path.GetFileNameWithoutExtension(p)).Where(a => DateTime.TryParseExact(a, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None,out _))
+                    .OrderByDescending(a => DateTime.ParseExact(a, "dd-MM-yyyy", System.Globalization.CultureInfo.InvariantCulture)).ToList();
 
-            return AuditList;
+                return auditList;
+            }
+
+            catch(DirectoryNotFoundException)
+            {
+                return new();
+            }
         }
 
         public string GetAuditPath

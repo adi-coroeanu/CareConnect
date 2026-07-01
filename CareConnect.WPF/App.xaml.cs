@@ -18,7 +18,7 @@ namespace CareConnect.View;
 
 public partial class App
 {
-    private IHost _host;
+    private readonly IHost _host;
 
     public App()
     {

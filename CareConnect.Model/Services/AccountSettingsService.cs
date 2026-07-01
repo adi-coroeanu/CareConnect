@@ -35,11 +35,12 @@ namespace CareConnect.Model.Services
 
         public bool MatchingPasswords(string? password, string? repassword)
         {
-            if (password == null || repassword == null)
-                return false;
-
-            if (password.Equals(repassword))
+            if (string.IsNullOrWhiteSpace(password) && string.IsNullOrWhiteSpace(repassword))
                 return true;
+
+            if (password!.Equals(repassword))
+                return true;
+
             return false;
         }
 

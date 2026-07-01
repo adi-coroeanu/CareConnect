@@ -4,6 +4,7 @@ using CareConnect.WPF.Services;
 using CareConnect.WPF.Views;
 using System;
 using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Text;
 using System.Windows.Input;
 
@@ -21,6 +22,10 @@ namespace CareConnect.WPF.ViewModels
         private string? _password;
         private string? _repassword;
         private string? _staffCode;
+        private bool _emailUsedError = false;
+        private bool _passwordFormatError = false;
+        private bool _passwordMatchError = false;
+        private bool _codeError = false;
 
         public ICommand SignupCommand { get; }
 
@@ -41,6 +46,7 @@ namespace CareConnect.WPF.ViewModels
                 _email = value;
                 EmailUsedError = false;
                 OnPropertyChanged(nameof(EmailUsedError));
+                OnPropertyChanged();
                 ((RelayCommand)SignupCommand).Refresh();
             }
         }
@@ -51,6 +57,7 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _firstName = value;
+                OnPropertyChanged();
                 ((RelayCommand)SignupCommand).Refresh();
             }
         }
@@ -60,6 +67,7 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _lastName = value;
+                OnPropertyChanged();
                 ((RelayCommand)SignupCommand).Refresh();
             }
         }
@@ -69,10 +77,14 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _password = value;
-                PasswordFormatError = false;
-                PasswordMatchError = false;
-                OnPropertyChanged(nameof(PasswordFormatError));
-                OnPropertyChanged(nameof(PasswordMatchError));
+
+                if (!string.IsNullOrWhiteSpace(_password))
+                {
+                    PasswordFormatError = false;
+                    PasswordMatchError = false;
+                }
+
+                OnPropertyChanged();
                 ((RelayCommand)SignupCommand).Refresh();
             }
         }
@@ -83,7 +95,14 @@ namespace CareConnect.WPF.ViewModels
             set
             {
                 _repassword = value;
-                OnPropertyChanged(nameof(PasswordMatchError));
+
+                if (!string.IsNullOrWhiteSpace(_password))
+                {
+                    PasswordFormatError = false;
+                    PasswordMatchError = false;
+                }
+
+                OnPropertyChanged();
                 ((RelayCommand)SignupCommand).Refresh();
             }
         }
@@ -95,14 +114,68 @@ namespace CareConnect.WPF.ViewModels
             {
                 _staffCode = value;
                 CodeError = false;
-                OnPropertyChanged(nameof(CodeError));
+                OnPropertyChanged();
             }
         }
 
-        public bool EmailUsedError { get; set; } = false;
-        public bool PasswordFormatError { get; set; } = false;
-        public bool PasswordMatchError { get; set; } = false;
-        public bool CodeError { get; set; } = false;
+        public bool EmailUsedError
+        { 
+            get => _emailUsedError; 
+            set
+            {
+                _emailUsedError = value;
+
+                if (_emailUsedError)
+                    Email = string.Empty;
+
+                OnPropertyChanged();
+            }
+        }
+        public bool PasswordFormatError
+        {
+            get => _passwordFormatError;
+            set
+            {
+                _passwordFormatError = value;
+
+                if(_passwordFormatError)
+                {
+                    Password = string.Empty;
+                    Repassword = string.Empty;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+        public bool PasswordMatchError
+        {
+            get => _passwordMatchError;
+            set
+            {
+                _passwordMatchError = value;
+
+                if (_passwordMatchError)
+                {
+                    Password = string.Empty;
+                    Repassword = string.Empty;
+                }
+
+                OnPropertyChanged();
+            }
+        }
+        public bool CodeError
+        {
+            get => _codeError;
+            set
+            {
+                _codeError = value;
+
+                if (_codeError)
+                    StaffCode = string.Empty;
+
+            OnPropertyChanged();
+            }
+        }
 
         public bool CanSignup(object? parameter)
         {
@@ -111,64 +184,30 @@ namespace CareConnect.WPF.ViewModels
 
         public void Signup(object? parameter)
         {
-            bool success = true;
+            EmailUsedError = _signupService.ExistingEmail(Email);
+            PasswordFormatError = !_signupService.CorrectPasswordFormat(Password);
+            PasswordMatchError = !_signupService.MatchingPasswords(Password, Repassword);
 
-            var email = Email;
-            var password = Password;
-            var repassword = Repassword;
-            var staffCode = StaffCode;
-            var firstName = FirstName;
-            var lastName = LastName;
+            if (!string.IsNullOrWhiteSpace(StaffCode) && !_signupService.ExistingCode(StaffCode))
+                CodeError = true;
 
-            Email = string.Empty;
-            Password = string.Empty;
-            Repassword = string.Empty;
-            StaffCode = string.Empty;
-            FirstName = string.Empty;
-            LastName = string.Empty;
-
-            if(_signupService.ExistingEmail(email))
+            if (EmailUsedError || PasswordFormatError || PasswordMatchError || CodeError)
             {
-                success = false;
-                EmailUsedError = true;
+                return;
             }
-            if(!_signupService.CorrectPasswordFormat(password))
-            {
-                success = false;
-                PasswordFormatError = true;
-            }
-            if(!_signupService.MatchingPasswords(password, repassword))
-            {
-                success = false;
-                PasswordMatchError = true;
-            }
+            string role;
 
-            if (success)
-            {
-                string? role = null;
+            if (_signupService.ExistingCode(StaffCode))
+                role = "STAFF";
+            else
+                role = "CLIENT";
 
-                if (string.IsNullOrWhiteSpace(staffCode))
-                    role = "CLIENT";
-                else if (_signupService.ExistingCode(staffCode))
-                    role = "STAFF";
-                else
-                    CodeError = true;
 
-                if (role != null)
-                {
-                    var user = _signupService.AddUser(email, firstName, lastName, password, role);
+            var user = _signupService.AddUser(Email, FirstName, LastName, Password, role);
                     
-                    _activeUserService.ActiveUser = user;
-                    _activeUserService.OpenActiveUserWindow();
-
-                    _navigationService.CloseWindow<SignupWindow>();
-                }
-            }
-
-            OnPropertyChanged(nameof(EmailUsedError));
-            OnPropertyChanged(nameof(PasswordFormatError)); 
-            OnPropertyChanged(nameof(PasswordMatchError)); 
-            OnPropertyChanged(nameof(CodeError));
+            _activeUserService.ActiveUser = user;
+            _activeUserService.OpenActiveUserWindow();
+            _navigationService.CloseWindow<SignupWindow>();
         }
     }
 }
