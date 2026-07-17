@@ -1,18 +1,20 @@
 ﻿using CareConnect.Model.Models;
 using CareConnect.Model.Services;
-using CareConnect.WPF.Views;
 using CareConnect.WPF.Services;
 using CareConnect.WPF.ViewModels;
 using CareConnect.WPF.ViewModels.UserControls;
+using CareConnect.WPF.Views;
+using CareConnect.WPF.Views.UserControls;
+using CareConnect.WPF.Workers;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Runtime.InteropServices.JavaScript;
 using System.Windows;
-using CareConnect.WPF.Views.UserControls;
-using CareConnect.WPF.Workers;
 
 namespace CareConnect.View;
 
@@ -23,15 +25,19 @@ public partial class App
     public App()
     {
         _host = new HostBuilder()
-            //.ConfigureAppConfiguration((context, config) =>
-            //{
-            //    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            //})
+            .ConfigureAppConfiguration((context, config) =>
+            {
+                config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+                config.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: true);
+            })
             .ConfigureServices((context, services) =>
             {
+                var connectionString = context.Configuration.GetConnectionString("LocalConnection");
+
                 services.AddDbContext<ModelContext>(options =>
                 {
-                    options.UseOracle("User Id=CareConnect;Password=CareConnect1234;Data Source=localhost:1521/XEPDB1;");
+                    options.UseOracle(connectionString);
                 });
 
                 //Views
@@ -77,6 +83,8 @@ public partial class App
                 services.AddTransient<UsersAdminService>();
                 services.AddSingleton<AuditService>();
                 services.AddTransient<AuditAdminService>();
+
+                services.AddSingleton<PasswordHasher<string>>();
 
                 //Workers
                 services.AddHostedService<CodesWorker>();

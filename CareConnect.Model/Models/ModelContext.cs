@@ -33,7 +33,7 @@ public partial class ModelContext : DbContext
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008979");
+            entity.HasKey(e => e.Id).HasName("SYS_C008411");
 
             entity.ToTable("BOOKINGS");
 
@@ -44,6 +44,11 @@ public partial class ModelContext : DbContext
             entity.Property(e => e.BookingDate)
                 .HasColumnType("DATE")
                 .HasColumnName("BOOKING_DATE");
+            entity.Property(e => e.EmailSent)
+                .IsRequired()
+                .HasDefaultValueSql("0 ")
+                .HasColumnType("NUMBER(1)")
+                .HasColumnName("EMAIL_SENT");
             entity.Property(e => e.IdService)
                 .HasMaxLength(36)
                 .IsUnicode(false)
@@ -59,17 +64,17 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.IdServiceNavigation).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.IdService)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("SYS_C008981");
+                .HasConstraintName("SYS_C008413");
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Bookings)
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("SYS_C008980");
+                .HasConstraintName("SYS_C008412");
         });
 
         modelBuilder.Entity<Code>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008990");
+            entity.HasKey(e => e.Id).HasName("SYS_C008422");
 
             entity.ToTable("CODES");
 
@@ -87,12 +92,12 @@ public partial class ModelContext : DbContext
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Codes)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("SYS_C008991");
+                .HasConstraintName("SYS_C008423");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008987");
+            entity.HasKey(e => e.Id).HasName("SYS_C008419");
 
             entity.ToTable("PAYMENTS");
 
@@ -118,12 +123,12 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.IdBookingNavigation).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.IdBooking)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("SYS_C008988");
+                .HasConstraintName("SYS_C008420");
         });
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008975");
+            entity.HasKey(e => e.Id).HasName("SYS_C008405");
 
             entity.ToTable("SERVICES");
 
@@ -157,16 +162,16 @@ public partial class ModelContext : DbContext
             entity.HasOne(d => d.IdDoctorNavigation).WithMany(p => p.Services)
                 .HasForeignKey(d => d.IdDoctor)
                 .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("SYS_C008976");
+                .HasConstraintName("SYS_C008406");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("SYS_C008968");
+            entity.HasKey(e => e.Id).HasName("SYS_C008398");
 
             entity.ToTable("USERS");
 
-            entity.HasIndex(e => e.Email, "SYS_C008969").IsUnique();
+            entity.HasIndex(e => e.Email, "SYS_C008399").IsUnique();
 
             entity.Property(e => e.Id)
                 .HasMaxLength(36)
@@ -185,7 +190,7 @@ public partial class ModelContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("LAST_NAME");
             entity.Property(e => e.Password)
-                .HasMaxLength(50)
+                .HasMaxLength(84)
                 .IsUnicode(false)
                 .HasColumnName("PASSWORD");
             entity.Property(e => e.UserRole)

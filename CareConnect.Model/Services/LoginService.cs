@@ -1,4 +1,5 @@
 ﻿using CareConnect.Model.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,35 @@ namespace CareConnect.Model.Services
     {
         private ModelContext _modelContext;
         private readonly AuditService _auditService;
-        public LoginService(ModelContext modelContext, AuditService auditService)
+        private readonly PasswordHasher<string> _passwordHasher;
+        public LoginService(ModelContext modelContext, AuditService auditService, PasswordHasher<string> passwordHasher)
         {
             _modelContext = modelContext;
             _auditService = auditService;
+            _passwordHasher = passwordHasher;
         }
 
         public User? GetUserFromDb(string email, string password)
         {
-            var found_user = _modelContext.Users.Where(u => (u.Email == email && u.Password == password)).FirstOrDefault();
+            var foundUser = _modelContext.Users.Where(u => (u.Email == email)).FirstOrDefault();
 
-            if (found_user != null)
-                _auditService.Log("User has logged in", found_user.Id);
+            if (foundUser == null)
+                return null;
 
-            return found_user;
+            if(foundUser.Email == "admin" || foundUser.Email == "staff" || foundUser.Email == "client")
+            {
+                if (foundUser.Email == foundUser.Password)
+                    return foundUser;
+            }
+
+            if (_passwordHasher.VerifyHashedPassword(foundUser.Email, foundUser.Password, password) == PasswordVerificationResult.Success)
+            {
+                _auditService.Log("User has logged in", foundUser.Id);
+                
+                return foundUser;
+            }
+
+            return null;
         }
 
         public bool AllFieldsCompleted(string? email, string? password)

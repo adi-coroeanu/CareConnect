@@ -2,6 +2,7 @@
 using CareConnect.ViewModel.Commands;
 using CareConnect.WPF.Services;
 using CareConnect.WPF.Views;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

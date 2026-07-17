@@ -1,4 +1,5 @@
 ﻿using CareConnect.Model.Models;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,11 +11,13 @@ namespace CareConnect.Model.Services
     {
         private readonly ModelContext _modelContext;
         private readonly AuditService _auditService;
+        private readonly PasswordHasher<string> _passwordHasher;
 
-        public SignupService(ModelContext modelContext, AuditService auditService) 
+        public SignupService(ModelContext modelContext, AuditService auditService, PasswordHasher<string> passwordHasher) 
         {
             _modelContext = modelContext;
             _auditService = auditService;
+            _passwordHasher = passwordHasher;
         }
 
         public bool AllFieldsCompleted(string? email, string? firstName, string? lastName, string? password, string? repassword)
@@ -76,7 +79,7 @@ namespace CareConnect.Model.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 UserRole = role,
-                Password = password,
+                Password = _passwordHasher.HashPassword(email, password),
                 Email = email,
                 FirstName = firstName,
                 LastName = lastName

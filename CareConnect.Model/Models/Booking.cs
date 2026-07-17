@@ -15,6 +15,8 @@ public partial class Booking
 
     public decimal TotalAmmount { get; set; }
 
+    public bool? EmailSent { get; set; }
+
     public virtual Service? IdServiceNavigation { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }
